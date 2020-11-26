@@ -1,66 +1,51 @@
 <template>
-
-  <div class="tab-bar-item" @click="itemClick">
-    <div v-if="!isActive">
-      <slot name="item-icon"></slot>
-    </div>
-    <div v-else>
-      <slot name="item-icon-active"></slot>
-    </div>
-
-    <div :style="activeStyle"><slot name="item-text"></slot></div>
-
-    <!--    <img alt="" src="../../assets/img/03-tabbar/首页.png">-->
-    <!--      <div>首页</div>-->
+  <div id="tab-bar-item" @click="itemClick">
+    <div class="item-icon" v-show="!isActive"><slot name="icon"></slot></div>
+    <div class="item-active-icon" v-show="isActive"><slot name="active-icon"></slot></div>
+    <div class="item-text" :style="activeStyle"><slot name="text"></slot></div>
   </div>
-
 </template>
 
 <script>
-export default {
-  name: "TabBarItem",
-  props: {
-    path: String,
-    activeColor: {
-      type: String,
-      default: 'red'
-    }
-  },
-  data() {
-    return {
-      // isActive: true
-    }
-  },
-  methods: {
-    itemClick() {
-      this.$router.replace(this.path)
-      console.log(this.path);
-    }
-  },
-  computed: {
-    isActive() {//判断图片
-      return this.$route.path.indexOf(this.path) !== -1
+	export default {
+		name: "TabBarItem",
+    props: {
+			link: {
+				type: String,
+        required: true
+      }
     },
-    activeStyle() {
-      return this.isActive ? {color: this.activeColor} : {};
+    computed: {
+			isActive() {
+				return this.$route.path.indexOf(this.link) !== -1
+      },
+      activeStyle() {
+				return this.isActive ? {'color': 'red'} : {}
+      }
+    },
+    methods: {
+			itemClick() {
+				this.$router.replace(this.link)
+      }
     }
-  }
-}
+	}
 </script>
 
 <style scoped>
+  #tab-bar-item {
+    flex: 1;
+  }
 
-.tab-bar-item {
-  cursor: pointer;
-  text-align: center;
-  flex: 1;
-  height: 49px;
-}
+  .item-icon img, .item-active-icon img {
+    width: 24px;
+    height: 24px;
+    margin-top: 5px;
+    vertical-align: middle;
+  }
 
-.tab-bar-item img {
-  width: 67px;
-  height: 55px;
-}
-
-
+  .item-text {
+    font-size: 12px;
+    margin-top: 3px;
+    color: #333;
+  }
 </style>
